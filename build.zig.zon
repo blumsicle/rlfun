@@ -1,0 +1,12 @@
+.{
+    .name = "rlfun",
+    .version = "0.0.1",
+    .dependencies = .{
+        .@"raylib-zig" = .{
+            .path = "../raylib-zig",
+        },
+    },
+    .paths = .{
+        "",
+    },
+}
