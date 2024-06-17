@@ -1,16 +1,21 @@
 const std = @import("std");
 
-const AllocatorPtr = *anyopaque;
-const RandPtr = *anyopaque;
 const GameStatePtr = *anyopaque;
 
-var gameInit: *const fn (AllocatorPtr, RandPtr) GameStatePtr = undefined;
-var gameDeinit: *const fn (GameStatePtr) void = undefined;
-var gameReload: *const fn (GameStatePtr) void = undefined;
-var gameShouldReload: *const fn (GameStatePtr) bool = undefined;
-var gameRun: *const fn (GameStatePtr) bool = undefined;
+const GameInit = *const fn (*std.mem.Allocator, *std.rand.Xoshiro256) GameStatePtr;
+const GameDeinit = *const fn (GameStatePtr) void;
+const GameReload = *const fn (GameStatePtr) void;
+const GameShouldReload = *const fn (GameStatePtr) bool;
+const GameRun = *const fn (GameStatePtr) bool;
+
+var gameInit: GameInit = undefined;
+var gameDeinit: GameDeinit = undefined;
+var gameReload: GameReload = undefined;
+var gameShouldReload: GameShouldReload = undefined;
+var gameRun: GameRun = undefined;
 
 pub fn main() !void {
+    std.log.info("gameInit: {}", .{@TypeOf(gameInit)});
     if (std.os.argv.len < 2) {
         return error.LibPathRequired;
     }

@@ -36,15 +36,15 @@ pub fn init(allocator: std.mem.Allocator, options: Options) !Self {
     };
 }
 
-pub fn deinit(self: *Self) void {
+pub fn deinit(self: *Self) !void {
     self.dots.deinit();
 }
 
-pub fn reload(self: *Self) void {
+pub fn reload(self: *Self) !void {
     _ = self;
 }
 
-pub fn update(self: *Self) void {
+pub fn update(self: *Self) !void {
     self.time += rl.getFrameTime();
     if (self.time - self.last_created_time > max_time) {
         self.last_created_time = self.time;
@@ -58,15 +58,15 @@ pub fn update(self: *Self) void {
         const g = self.options.rand.intRangeAtMost(u8, 0, 255);
         const b = self.options.rand.intRangeAtMost(u8, 0, 255);
 
-        self.dots.append(.{
+        try self.dots.append(.{
             .pos = rl.Vector2.init(x, y),
             .radius = radius,
             .color = rl.Color.init(r, g, b, 255),
-        }) catch @panic("unable to append dot");
+        });
     }
 }
 
-pub fn draw(self: *Self) void {
+pub fn draw(self: *Self) !void {
     rl.clearBackground(rl.Color.ray_white);
 
     for (self.dots.items) |dot| {

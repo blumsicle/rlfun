@@ -19,19 +19,19 @@ pub fn init(allocator: std.mem.Allocator, options: Options) !Self {
     };
 }
 
-pub fn deinit(self: *Self) void {
+pub fn deinit(self: *Self) !void {
     _ = self;
 }
 
-pub fn reload(self: *Self) void {
+pub fn reload(self: *Self) !void {
     _ = self;
 }
 
-pub fn update(self: *Self) void {
+pub fn update(self: *Self) !void {
     _ = self;
 }
 
-pub fn draw(self: *Self) void {
+pub fn draw(self: *Self) !void {
     rl.clearBackground(rl.Color.ray_white);
     rl.drawCircle(@divTrunc(self.options.screen_width, 2), @divTrunc(self.options.screen_height, 2), 30.0, rl.Color.sky_blue);
 }

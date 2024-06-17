@@ -28,11 +28,11 @@ pub fn init(allocator: std.mem.Allocator, options: Options) !Self {
     return state;
 }
 
-pub fn deinit(self: *Self) void {
+pub fn deinit(self: *Self) !void {
     _ = self;
 }
 
-pub fn reload(self: *Self) void {
+pub fn reload(self: *Self) !void {
     self.radius = readRadiusConfig(self.allocator, self.config_path);
 }
 
@@ -51,19 +51,19 @@ pub fn readRadiusConfig(allocator: std.mem.Allocator, configPath: []const u8) f3
     };
 }
 
-pub fn update(self: *Self) void {
+pub fn update(self: *Self) !void {
     self.time += rl.getFrameTime();
 }
 
-pub fn draw(self: *Self) void {
+pub fn draw(self: *Self) !void {
     rl.clearBackground(rl.Color.ray_white);
 
     var buf: [256]u8 = undefined;
-    const slice = std.fmt.bufPrintZ(
+    const slice = try std.fmt.bufPrintZ(
         &buf,
         "radius: {d:.02}, time: {d:.02}",
         .{ self.radius, self.time },
-    ) catch unreachable;
+    );
 
     rl.drawText(slice, 10, 10, 20, rl.Color.black);
 
